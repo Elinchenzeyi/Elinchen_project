@@ -4,9 +4,9 @@
     "href": "index.html",
     "title": "Elinchen_project",
     "section": "",
-    "text": "1 Introduction",
+    "text": "1 Topic\nComparing LIME with Intrinsically Interpretable Models\n\n\n2 Research Question:\nDo LIME’s explanations about black box models align with the interpretability of intrinsically interpretable models like linear regression?\n\n\n3 Key elements to examine:\n\nDo the most important features identified by LIME match those from linear regression?\nHow consistent are LIME’s explanations across similar observations?\nWhen they disagree, what patterns emerge?",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Topic</span>"
     ]
   },
   {

@@ -1,1 +1,13 @@
-# Introduction
+# Topic
+
+Comparing LIME with Intrinsically Interpretable Models
+
+# Research Question:
+
+Do LIME's explanations about black box models align with the interpretability of intrinsically interpretable models like linear regression?
+
+# Key elements to examine: 
+1. Do the most important features identified by LIME match those from linear regression?
+2. How consistent are LIME's explanations across similar observations?
+3. When they disagree, what patterns emerge?
+
