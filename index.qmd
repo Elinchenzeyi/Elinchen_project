@@ -11,3 +11,8 @@ Do LIME's explanations about black box models align with the interpretability of
 2. How consistent are LIME's explanations across similar observations?
 3. When they disagree, what patterns emerge?
 
+#Data to use:
+Boston Housing Data 
+
+#Complex model to use: 
+Random Forest Model
