@@ -1,5 +1,17 @@
 # Data
 
+```{r}
+library(MASS)
+data("Boston")
+head(Boston)
+str(Boston)
+```
+
+
+
+
+
+
 ## Description
 
 ## Missing value analysis
