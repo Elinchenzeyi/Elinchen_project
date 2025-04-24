@@ -14,7 +14,7 @@
     "href": "data.html",
     "title": "2  Data",
     "section": "",
-    "text": "2.1 Description",
+    "text": "3\nCode\ncoefficients_df &lt;- as.data.frame(summary(lm_model)$coefficients)\ncoefficients_df$Feature &lt;- rownames(coefficients_df)\ncoefficients_df &lt;- coefficients_df[-1, ]  # Remove intercept\ncoefficients_df$AbsEstimate &lt;- abs(coefficients_df$Estimate)\ncoefficients_df &lt;- coefficients_df[order(-coefficients_df$AbsEstimate), ]\n\nhead(coefficients_df, 5) \n\n\n           Estimate Std. Error   t value     Pr(&gt;|t|) Feature AbsEstimate\nnox     -17.7666112  3.8197437 -4.651257 4.245644e-06     nox  17.7666112\nrm        3.8098652  0.4179253  9.116140 1.979441e-18      rm   3.8098652\nchas      2.6867338  0.8615798  3.118381 1.925030e-03    chas   2.6867338\ndis      -1.4755668  0.1994547 -7.398004 6.013491e-13     dis   1.4755668\nptratio  -0.9527472  0.1308268 -7.282511 1.308835e-12 ptratio   0.9527472",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]
@@ -23,8 +23,8 @@
     "objectID": "data.html#missing-value-analysis",
     "href": "data.html#missing-value-analysis",
     "title": "2  Data",
-    "section": "2.2 Missing value analysis",
-    "text": "2.2 Missing value analysis",
+    "section": "3.2 Missing value analysis",
+    "text": "3.2 Missing value analysis",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]
@@ -37,6 +37,16 @@
     "text": "Code\nlibrary(ggplot2)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Results</span>"
+    ]
+  },
+  {
+    "objectID": "data.html#description",
+    "href": "data.html#description",
+    "title": "2  Data",
+    "section": "3.1 Description",
+    "text": "3.1 Description",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Data</span>"
     ]
   }
 ]

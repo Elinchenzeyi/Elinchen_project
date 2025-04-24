@@ -1,14 +1,24 @@
 # Data
 
+For my project, I used the Boston Housing dataset to do the analysis. 
+
+Firstly, I just gave the summary of the linear regression model of the dataset in this code:
 ```{r}
 library(MASS)
 data("Boston")
-head(Boston)
-str(Boston)
+lm_model <- lm(medv ~ ., data = Boston)
+summary(lm_model)
 ```
+# 
 
 ```{r}
+coefficients_df <- as.data.frame(summary(lm_model)$coefficients)
+coefficients_df$Feature <- rownames(coefficients_df)
+coefficients_df <- coefficients_df[-1, ]  # Remove intercept
+coefficients_df$AbsEstimate <- abs(coefficients_df$Estimate)
+coefficients_df <- coefficients_df[order(-coefficients_df$AbsEstimate), ]
 
+head(coefficients_df, 5) 
 ```
 
 
