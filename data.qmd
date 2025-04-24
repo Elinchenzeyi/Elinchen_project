@@ -1,30 +1,36 @@
 # Data
 
-For my project, I used the Boston Housing dataset to do the analysis. 
+## For my project, I used the Boston Housing dataset to do the analysis. 
 
-Firstly, I just gave the summary of the linear regression model of the dataset in this code:
+### The following is the code using the random forest model for the Boston Housing Dataset!:
+
 ```{r}
 library(MASS)
+library(randomForest)
+library(lime)
+library(tidyverse)
+library(caret)
+
 data("Boston")
-lm_model <- lm(medv ~ ., data = Boston)
-summary(lm_model)
-```
-# 
+X <- Boston %>% select(-medv)
+y <- Boston$medv
 
+set.seed(42)
+train_index <- createDataPartition(y, p = 0.8, list = FALSE)
+X_train <- X[train_index, ]
+y_train <- y[train_index]
+X_test <- X[-train_index, ]
+y_test <- y[-train_index]
+
+rf_model <- randomForest(X_train, y_train)
+rf_model
+```
+### Here is code using the linear regression model for the Boston Housing Dataset!: 
 ```{r}
-coefficients_df <- as.data.frame(summary(lm_model)$coefficients)
-coefficients_df$Feature <- rownames(coefficients_df)
-coefficients_df <- coefficients_df[-1, ]  # Remove intercept
-coefficients_df$AbsEstimate <- abs(coefficients_df$Estimate)
-coefficients_df <- coefficients_df[order(-coefficients_df$AbsEstimate), ]
-
-head(coefficients_df, 5) 
+lm_model <- lm(y_train ~ ., data = X_train)
+lm_model
+lm_importance <- abs(coef(lm_model)[-1])
+names(lm_importance) <- names(X_train)
 ```
 
 
-
-
-
-## Description
-
-## Missing value analysis

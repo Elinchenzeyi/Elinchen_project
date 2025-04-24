@@ -11,3 +11,99 @@
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
+
+#LIME with Random Forest Model
+
+### I created the graph using the LIME algorithm for 10 individual predictions made by a Random Forest model on the Boston Housing dataset. In each facet, it shows a single observation. and for each observation, the top five most influential features are presented. 
+
+### Green bars are the features that increase the predicted housing price, and red bars are the features that decrease the predicted housing price. 
+```{r}
+library(MASS)
+data("Boston")
+lm_model <- lm(medv ~ ., data = Boston)
+summary(lm_model)
+# Fit linear regression model
+lm_model <- lm(medv ~ ., data = Boston)
+summary(lm_model)
+
+# Extract and rank absolute coefficients
+coefficients_df <- as.data.frame(summary(lm_model)$coefficients)
+coefficients_df$Feature <- rownames(coefficients_df)
+coefficients_df <- coefficients_df[-1, ]  # Remove intercept
+coefficients_df$AbsEstimate <- abs(coefficients_df$Estimate)
+coefficients_df <- coefficients_df[order(-coefficients_df$AbsEstimate), ]
+
+head(coefficients_df, 5)  # Top 5 features
+
+library(randomForest)
+library(lime)
+library(caret)
+library(ggplot2)
+set.seed(42)
+
+train_index <- createDataPartition(Boston$medv, p = 0.8, list = FALSE)
+train_data <- Boston[train_index, ]
+test_data <- Boston[-train_index, ]
+
+rf_model <- randomForest(medv ~ ., data = train_data)
+rf_model
+
+```
+
+
+
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(caret)
+library(lime)
+library(randomForest)
+library(MASS)
+
+model_type.randomForest <- function(x, ...) {
+  "regression"
+}
+
+# Define how to generate predictions
+predict_model.randomForest <- function(x, newdata, type, ...) {
+  data.frame(Response = predict(x, newdata = newdata))
+}
+
+explainer <- lime::lime(
+  x = train_data[, -which(names(train_data) == "medv")],
+  model = rf_model
+)
+
+explanations <- lime::explain(
+  x = test_data[1:10, -which(names(test_data) == "medv")],
+  explainer = explainer,
+  n_features = 5
+)
+
+# Pick top 5 features per case
+top_explanations <- explanations %>%
+  group_by(case) %>%
+  top_n(5, wt = abs(feature_weight)) %>%
+  ungroup()
+
+# Clean factor levels for proper ordering
+top_explanations <- top_explanations %>%
+  mutate(feature = factor(feature, levels = unique(feature[order(abs(feature_weight))])))
+
+# Custom LIME Plot
+ggplot(top_explanations, aes(x = reorder(feature, feature_weight), y = feature_weight, fill = feature_weight > 0)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  facet_wrap(~ case, scales = "free_y") +
+  labs(
+    title = "LIME Explanations for Boston Housing Predictions",
+    x = "Feature",
+    y = "Contribution to Prediction"
+  ) +
+  scale_fill_manual(values = c("red", "green")) +
+  theme_minimal(base_size = 12)
+
+```
+
