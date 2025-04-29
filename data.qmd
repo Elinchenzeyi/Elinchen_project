@@ -2,7 +2,33 @@
 
 ## For my project, I used the Boston Housing dataset to do the analysis. 
 
-### The following is the code using the random forest model for the Boston Housing Dataset!:
+These are the libraries that we need to use for our Boston Housing Data:
+
+MASS-for Boston dataset
+Dplyr-for data wrangling 
+RandomForest-for random forest model
+ggplot2-for plotting
+shapvz-for using the SHAP model
+tidyr-for reshaping my data
+tibble-for conversion
+corrr-for correlation
+
+```{r}
+library(MASS)           
+library(dplyr)         
+library(randomForest)   
+library(ggplot2)        
+library(shapviz)       
+library(tidyr)          
+library(tibble)         
+library(corrr)      
+```
+
+The Boston Housing Dataset: 
+
+I set X and Y. 
+For X, it shows  all the features in the dataset
+For Y, it shows the target in our dataset, which is medv
 
 ```{r}
 library(MASS)
@@ -15,6 +41,11 @@ data("Boston")
 X <- Boston %>% select(-medv)
 y <- Boston$medv
 
+```
+
+Here, I made the train and test data:
+
+```{r}
 set.seed(42)
 train_index <- createDataPartition(y, p = 0.8, list = FALSE)
 X_train <- X[train_index, ]
@@ -22,15 +53,97 @@ y_train <- y[train_index]
 X_test <- X[-train_index, ]
 y_test <- y[-train_index]
 
+```
+
+
+Based on the train and test data, I trained the random forest model: 
+
+The result shows that my model explains 85.93% variability in the dataset 
+and the average squared difference between the actual and predicted values 
+is 11.49
+
+Based on this result, I could know that the random forest model is a good
+fit for SHAP interpretation! 
+
+```{r}
 rf_model <- randomForest(X_train, y_train)
 rf_model
 ```
-### Here is code using the linear regression model for the Boston Housing Dataset!: 
+
+Here is the trained linear regression model:  
 ```{r}
 lm_model <- lm(y_train ~ ., data = X_train)
 lm_model
 lm_importance <- abs(coef(lm_model)[-1])
 names(lm_importance) <- names(X_train)
+```
+
+Then, I made the prediction for SHAP and computed the SHAP values.
+The SHAP values could tell that all the features have the standardized values,
+like they are the standardized observations. 
+
+```{r}
+library(MASS)
+library(randomForest)
+library(lime)
+library(tidyverse)
+
+data(Boston)
+set.seed(42)
+train_idx <- sample(1:nrow(Boston), 0.8 * nrow(Boston))
+train_data <- Boston[train_idx, ]
+test_data <- Boston[-train_idx, ]
+
+rf_model <- randomForest(medv ~ ., data = train_data)
+
+
+lm_model <- lm(medv ~ ., data = train_data)
+
+predict_model_rf <- function(model, newdata) {
+  predict(model, newdata)
+}
+
+
+predict_rf <- function(model, newdata) {
+  predict(model, newdata = newdata)
+}
+
+shap_values <- fastshap::explain(
+  rf_model,
+  X = train_data[, -which(names(train_data) == "medv")],
+  pred_wrapper = predict_rf,
+  nsim = 10 
+)
+
+shap_values
+```
+
+Here are the features in our SHAP values. (just two rows for a basic description)
+I will explain more feature importance with the graphs in d3graph.qmd section!
+```{r}
+dim(shap_values) 
+dim(test_data[1:5, -which(names(test_data) == "medv")]) 
+
+
+cases_to_plot <- 1:5
+shp <- shapviz(
+  object = shap_values[cases_to_plot, ], 
+  X = test_data[cases_to_plot, -which(names(test_data) == "medv")]
+)
+
+shp
+
+```
+
+
+Here are the feature importance that I could easily interpret from the linear
+regression model. It is obviously that nox is the most important feature followed
+by rm, chas, dis, and so forth.
+
+```{r}
+lm_importance <- coef(lm_model)[-1] %>% abs() %>% sort(decreasing = TRUE) %>%
+  enframe(name = "feature", value = "lm_importance")
+lm_importance
 ```
 
 
