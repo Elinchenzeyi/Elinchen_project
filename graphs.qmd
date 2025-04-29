@@ -17,9 +17,14 @@ The following graph is the force plot that is based on using SHAP model.
 In this plot, it shows the variables that affect the predictions the most. 
 Specifically, I can notice that based on the predictions, rm is 6.01, which 
 falls into the red region that shows decrease 0.225. I think it might suggest 
-that average number of rooms puts the prediction down by 0.225.
-However, the per capita crime rate, pupil-teacher ratio, lower status population,
-proposition of old housing are the variables that increases our prediction.
+that average number of rooms puts the prediction down by 0.225. But it does
+not mean that this feature is not important. Instead, this feature is important
+as it creates impact for our model.
+
+Also, we can notice that the per capita crime rate, pupil-teacher ratio, 
+lower status population, proposition of old housing are the variables that 
+increases our prediction.
+
 Specifcially, I can notice that per capital crime rate is 0.0883, which increases
 our model by 0.103. pupil teacher ratio is 15.2, which increases our model by
 0.378. Age is 66.6, which increases our model by 0.587. 
@@ -138,7 +143,7 @@ train_data <- Boston[train_idx, ]
 test_data <- Boston[-train_idx, ]
 
 
-lm_model <- lm(medv ~ ., data = train_data)  # medv = median home value ($1000s)
+lm_model <- lm(medv ~ ., data = train_data)
 
 lm_coef <- tidy(lm_model) %>%
   mutate(
@@ -180,6 +185,17 @@ ggplot(lm_coef %>% filter(term != "(Intercept)"),
   theme_minimal()
 ```
 
+
+From the comparison graph I made, it is obvious that speaking of feature
+importance, linear regression model and the SHAP model highlights some
+consistent importance features for the boston housing dataset, which are 
+rm, pupil-teacher ratio, lstat, and crim. 
+
+But linear regression model shows that nox is also important, and in fact, 
+it is the most impactful feature in the model. It's interesting to notice
+that SHAP shows that it is slightly important to the overall model prediction.
+This pattern applies similarly for the feature chas. 
+
 ```{r}
 library(plotly)
 library(shiny)
@@ -203,10 +219,9 @@ shap_df <- data.frame(
 
 library(broom)
 
-# Fit model
+
 lm_model <- lm(medv ~ ., data = train_data)
 
-# Extract coefficients
 lm_coef <- tidy(lm_model) %>%
   filter(term != "(Intercept)") %>%
   mutate(

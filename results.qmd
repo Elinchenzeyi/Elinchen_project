@@ -1,8 +1,25 @@
 # Results
 
+From the data section, I generated the train and test data, and the two different 
+models are based on the data.
 
+I could tell that speaking of the model performance comparison:
+Random Forest	 vs. Linear Regression
+Mean Squared Residuals for random forest:	11.5135.
+Mean Squared Residuals for linear regression: tendency to be higher
+% Variance Explained for random forest:	85.9%	
+% Variance Explained for linear regression: tendency to be lower
+Linearity Assumed for random forest?	❌ No
+Linearity Assumed for linear regression?	✅ Yes	
+Captures Interactions for random forest?	✅ Yes	
+Captures Interactions for linear regression? ❌ No
+Captures Non-linearity for random forest?	✅ Yes	
+Captures Non-linearity for linear regression? ❌ No
 ```{r}
-library(ggplot2)
-
+rf_model <- randomForest(X_train, y_train, ntree = 500)
+lm_model <- lm(medv ~ ., data = Boston[train_idx, ])
+rf_model
+lm_model
 ```
+
 
