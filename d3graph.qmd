@@ -12,20 +12,19 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
 
-### The following graph is the force plot
-### that is based on using SHAP model.
-### In this plot, it shows the variables that 
-### affect the predictions the most. 
-### Specifically, I can notice that based on the predictions, rm is 6.01, which 
-### falls into the red region that shows decrease 0.225. I think it might suggest that
-### average number of rooms puts the prediction down by 0.225.
-### However, the per capita crime rate, pupil-teacher ratio, lower status population,
-### proposition of old housing are the variables that increases our prediction.
-### Specifcially, I can notice that per capital crime rate is 0.0883, which increases
-### our model by 0.103. pupil teacher ratio is 15.2, which increases our model by
-### 0.378. Age is 66.6, which increases our model by 0.587. 
+The following graph is the force plot that is based on using SHAP model.
+In this plot, it shows the variables that affect the predictions the most. 
+Specifically, I can notice that based on the predictions, rm is 6.01, which 
+falls into the red region that shows decrease 0.225. I think it might suggest 
+that average number of rooms puts the prediction down by 0.225.
+However, the per capita crime rate, pupil-teacher ratio, lower status population,
+proposition of old housing are the variables that increases our prediction.
+Specifcially, I can notice that per capital crime rate is 0.0883, which increases
+our model by 0.103. pupil teacher ratio is 15.2, which increases our model by
+0.378. Age is 66.6, which increases our model by 0.587. 
 
-### E[f(x)] gives the base value across the training data. 
+E[f(x)] gives the base value across the training data. 
+
 ```{r}
 library(fastshap)
 library(shapviz)
@@ -35,6 +34,10 @@ library(randomForest)
 library(lime)
 library(tidyverse)
 library(caret)
+
+data("Boston")
+X <- Boston %>% select(-medv)
+y <- Boston$medv
 ```
 
 ```{r}
@@ -46,6 +49,10 @@ X_train <- X[train_index, ]
 y_train <- y[train_index]
 X_test <- X[-train_index, ]
 y_test <- y[-train_index]
+
+train_idx <- sample(1:nrow(Boston), 0.8 * nrow(Boston))
+train_data <- Boston[train_idx, ]
+test_data <- Boston[-train_idx, ]
 
 rf_model <- randomForest(X_train, y_train)
 rf_model
@@ -64,14 +71,12 @@ predict_model_rf <- function(model, newdata) {
   predict(model, newdata)
 }
 
+```
+
+```{r}
 predict_rf <- function(model, newdata) {
   predict(model, newdata = newdata)
 }
-
-
-dim(shap_values) 
-dim(test_data[1:5, -which(names(test_data) == "medv")]) 
-
 
 shap_values <- fastshap::explain(
   rf_model,
@@ -79,6 +84,9 @@ shap_values <- fastshap::explain(
   pred_wrapper = predict_rf,
   nsim = 100
 )
+
+dim(shap_values) 
+dim(test_data[1:5, -which(names(test_data) == "medv")]) 
 
 cases_to_plot <- 1:5
 shp <- shapviz(
@@ -91,17 +99,17 @@ sv_force(shp, row_id = 1)
   
 ```
 
-###Then, the model's actual prediction is the formula:
-### Base Value + Sum of SHAP Contributions = 0 + (+0.378 + 0.528 + 0.587 - 0.225 + ...) 
-### = 1.3
+Then, the model's actual prediction is the formula:
+Base Value + Sum of SHAP Contributions = 0 + (+0.378 + 0.528 + 0.587 - 0.225 + ...) 
+=1.3
 ```{r}
-f(x)=1.3
+function_x<-1.3
 ```
 
 
-### It shows the variables that are the most important ones n our SHAP feature graph and 
-### from this graph with all the yellow bars, we can notice that lstat is the 
-### most influential one followed by age, and then pupil-teacher ratio. 
+It shows the variables that are the most important ones n our SHAP feature graph and 
+from this graph with all the yellow bars, we can notice that lstat is the 
+most influential one followed by age, and then pupil-teacher ratio. 
 ```{r}
 sv_importance(shp)+
    labs(title = "Boston Housing: SHAP Feature Importance",
@@ -109,7 +117,7 @@ sv_importance(shp)+
   theme_minimal()
 ```
 
-### Graphs with linear regression models: 
+Graphs with linear regression models: 
 ```{r}
 library(MASS)
 library(tidyverse)
