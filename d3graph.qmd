@@ -126,27 +126,27 @@ Graphs with linear regression models:
 ```{r}
 library(MASS)
 library(tidyverse)
-library(broom)  # For tidy model summaries
+library(broom)  
 
-# Load data
+
 data(Boston)
 
-# Train-test split (consistent with your RF model)
+
 set.seed(42)
 train_idx <- sample(1:nrow(Boston), 0.8 * nrow(Boston))
 train_data <- Boston[train_idx, ]
 test_data <- Boston[-train_idx, ]
 
-# Fit linear regression
+
 lm_model <- lm(medv ~ ., data = train_data)  # medv = median home value ($1000s)
 
 lm_coef <- tidy(lm_model) %>%
   mutate(
-    abs_effect = abs(estimate),  # Absolute effect size
+    abs_effect = abs(estimate), 
     significance = ifelse(p.value < 0.05, "Significant", "Not significant")
   )
 
-# Print top 5 most impactful features
+
 lm_coef %>%
   filter(term != "(Intercept)") %>%
   arrange(desc(abs_effect)) %>%
@@ -158,8 +158,13 @@ lm_coef %>%
 From this linear regression model, I can notice that there are several 
 significant variables that contribute to the model prediction, such as
 the rm, rad, nox, dis, pupil-teacher ratio, lstat, crim. It is interesting 
-to notice that the linear regression model also lists the variable that is not
-significant, which is chas in the Boston Housing dataset. 
+to notice that the linear regression model also lists the feature effect that
+is not significant, which is chas in the Boston Housing dataset. 
+
+I think it shows that chas is not statistically significant in the linear
+model, but it doesn't mean that chas is not important because feature importance
+usually does not consider p-values. Feature importance helps to know how the 
+model relies on chas on average. 
 
 ```{r}
 ggplot(lm_coef %>% filter(term != "(Intercept)"), 
@@ -169,10 +174,64 @@ ggplot(lm_coef %>% filter(term != "(Intercept)"),
   labs(
     title = "Linear Regression: Feature Effects on Home Value",
     x = "Feature",
-    y = "Coefficient Estimate ($1000s)",
+    y = "Coefficient Estimate",
     fill = "Significance"
   ) +
   theme_minimal()
 ```
 
+```{r}
+library(plotly)
+library(shiny)
+library(ggplot2)
+library(tidyverse)
+
+shap_values_df <- as.data.frame(shap_values)
+
+shap_importance <- colMeans(abs(shap_values_df))
+
+importance_df <- data.frame(
+  Feature = names(shap_importance),
+  Importance = shap_importance
+)
+
+shap_df <- data.frame(
+  Feature = names(shap_importance),
+  Importance = shap_importance,
+  Model = "Random Forest (SHAP)"
+)
+
+library(broom)
+
+# Fit model
+lm_model <- lm(medv ~ ., data = train_data)
+
+# Extract coefficients
+lm_coef <- tidy(lm_model) %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    Feature = term,
+    Importance = abs(estimate),
+    Model = "Linear Regression"
+  ) %>%
+  select(Feature, Importance, Model)
+
+combined_df <- bind_rows(shap_df, lm_coef)
+
+library(ggplot2)
+
+ggplot(combined_df, aes(x = reorder(Feature, Importance), y = Importance, fill = Model)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  labs(
+    title = "Feature Importance: SHAP vs Linear Regression",
+    x = "Feature",
+    y = "Importance (Mean SHAP)",
+    fill = "Model"
+  ) +
+  theme_minimal()
+
+
+
+```
 
