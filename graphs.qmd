@@ -29,7 +29,7 @@ Specifcially, I can notice that per capital crime rate is 0.0883, which increase
 our model by 0.103. pupil teacher ratio is 15.2, which increases our model by
 0.378. Age is 66.6, which increases our model by 0.587. 
 
-E[f(x)] gives the base value across the training data. 
+Here, I think the E[f(x)] gives the base value across the training data. 
 
 ```{r}
 library(fastshap)

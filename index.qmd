@@ -2,11 +2,11 @@
 
 Comparing SHAP with Intrinsically Interpretable Models
 
-# Research Question:
+## Research Question:
 
 Do SHAP's explanations about black box models align with the interpretability of intrinsically interpretable models like linear regression?
 
-# Key elements to examine: 
+## Key elements to examine: 
 1. Do the most important features identified by SHAP match those from linear regression?
 2. How consistent are SHAP's explanations across similar observations?
 3. Would SHAP and linear regression disagree on some parts?
