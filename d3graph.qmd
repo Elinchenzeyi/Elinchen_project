@@ -12,98 +12,147 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script src="scripts/myscript.js"></script>
 
-#LIME with Random Forest Model
+### The following graph is the force plot
+### that is based on using SHAP model.
+### In this plot, it shows the variables that 
+### affect the predictions the most. 
+### Specifically, I can notice that based on the predictions, rm is 6.01, which 
+### falls into the red region that shows decrease 0.225. I think it might suggest that
+### average number of rooms puts the prediction down by 0.225.
+### However, the per capita crime rate, pupil-teacher ratio, lower status population,
+### proposition of old housing are the variables that increases our prediction.
+### Specifcially, I can notice that per capital crime rate is 0.0883, which increases
+### our model by 0.103. pupil teacher ratio is 15.2, which increases our model by
+### 0.378. Age is 66.6, which increases our model by 0.587. 
 
-### I created the graph using the LIME algorithm for 10 individual predictions made by a Random Forest model on the Boston Housing dataset. In each facet, it shows a single observation. and for each observation, the top five most influential features are presented. 
-
-### Green bars are the features that increase the predicted housing price, and red bars are the features that decrease the predicted housing price. 
+### E[f(x)] gives the base value across the training data. 
 ```{r}
+library(fastshap)
+library(shapviz)
+library(ggplot2)
 library(MASS)
-data("Boston")
-lm_model <- lm(medv ~ ., data = Boston)
-summary(lm_model)
-# Fit linear regression model
-lm_model <- lm(medv ~ ., data = Boston)
-summary(lm_model)
-
-# Extract and rank absolute coefficients
-coefficients_df <- as.data.frame(summary(lm_model)$coefficients)
-coefficients_df$Feature <- rownames(coefficients_df)
-coefficients_df <- coefficients_df[-1, ]  # Remove intercept
-coefficients_df$AbsEstimate <- abs(coefficients_df$Estimate)
-coefficients_df <- coefficients_df[order(-coefficients_df$AbsEstimate), ]
-
-head(coefficients_df, 5)  # Top 5 features
-
 library(randomForest)
 library(lime)
-library(caret)
-library(ggplot2)
-set.seed(42)
-
-train_index <- createDataPartition(Boston$medv, p = 0.8, list = FALSE)
-train_data <- Boston[train_index, ]
-test_data <- Boston[-train_index, ]
-
-rf_model <- randomForest(medv ~ ., data = train_data)
-rf_model
-
-```
-
-
-
-
-```{r}
-library(dplyr)
-library(ggplot2)
 library(tidyverse)
 library(caret)
-library(lime)
-library(randomForest)
+```
+
+```{r}
+data("Boston")
+
+set.seed(42)
+train_index <- createDataPartition(y, p = 0.8, list = FALSE)
+X_train <- X[train_index, ]
+y_train <- y[train_index]
+X_test <- X[-train_index, ]
+y_test <- y[-train_index]
+
+rf_model <- randomForest(X_train, y_train)
+rf_model
+
+lm_model <- lm(y_train ~ ., data = X_train)
+lm_model
+
+lm_importance <- abs(coef(lm_model)[-1])
+names(lm_importance) <- names(X_train)
+
+rf_model <- randomForest(medv ~ ., data = train_data)
+
+lm_model <- lm(medv ~ ., data = train_data)
+
+predict_model_rf <- function(model, newdata) {
+  predict(model, newdata)
+}
+
+predict_rf <- function(model, newdata) {
+  predict(model, newdata = newdata)
+}
+
+
+dim(shap_values) 
+dim(test_data[1:5, -which(names(test_data) == "medv")]) 
+
+
+shap_values <- fastshap::explain(
+  rf_model,
+  X = test_data[1:5, -which(names(test_data) == "medv")],  
+  pred_wrapper = predict_rf,
+  nsim = 100
+)
+
+cases_to_plot <- 1:5
+shp <- shapviz(
+  object = shap_values[cases_to_plot, ], 
+  X = test_data[cases_to_plot, -which(names(test_data) == "medv")]
+)
+
+
+sv_force(shp, row_id = 1) 
+  
+```
+
+###Then, the model's actual prediction is the formula:
+### Base Value + Sum of SHAP Contributions = 0 + (+0.378 + 0.528 + 0.587 - 0.225 + ...) 
+### = 1.3
+```{r}
+f(x)=1.3
+```
+
+
+### It shows the variables that are the most important ones n our SHAP feature graph and 
+### from this graph with all the yellow bars, we can notice that lstat is the 
+### most influential one followed by age, and then pupil-teacher ratio. 
+```{r}
+sv_importance(shp)+
+   labs(title = "Boston Housing: SHAP Feature Importance",
+       x = "Impact on Home Value Price") +
+  theme_minimal()
+```
+
+### Graphs with linear regression models: 
+```{r}
 library(MASS)
+library(tidyverse)
+library(broom)  # For tidy model summaries
 
-model_type.randomForest <- function(x, ...) {
-  "regression"
-}
+# Load data
+data(Boston)
 
-# Define how to generate predictions
-predict_model.randomForest <- function(x, newdata, type, ...) {
-  data.frame(Response = predict(x, newdata = newdata))
-}
+# Train-test split (consistent with your RF model)
+set.seed(42)
+train_idx <- sample(1:nrow(Boston), 0.8 * nrow(Boston))
+train_data <- Boston[train_idx, ]
+test_data <- Boston[-train_idx, ]
 
-explainer <- lime::lime(
-  x = train_data[, -which(names(train_data) == "medv")],
-  model = rf_model
-)
+# Fit linear regression
+lm_model <- lm(medv ~ ., data = train_data)  # medv = median home value ($1000s)
 
-explanations <- lime::explain(
-  x = test_data[1:10, -which(names(test_data) == "medv")],
-  explainer = explainer,
-  n_features = 5
-)
+lm_coef <- tidy(lm_model) %>%
+  mutate(
+    abs_effect = abs(estimate),  # Absolute effect size
+    significance = ifelse(p.value < 0.05, "Significant", "Not significant")
+  )
 
-# Pick top 5 features per case
-top_explanations <- explanations %>%
-  group_by(case) %>%
-  top_n(5, wt = abs(feature_weight)) %>%
-  ungroup()
+# Print top 5 most impactful features
+lm_coef %>%
+  filter(term != "(Intercept)") %>%
+  arrange(desc(abs_effect)) %>%
+  head(5)
 
-# Clean factor levels for proper ordering
-top_explanations <- top_explanations %>%
-  mutate(feature = factor(feature, levels = unique(feature[order(abs(feature_weight))])))
-
-# Custom LIME Plot
-ggplot(top_explanations, aes(x = reorder(feature, feature_weight), y = feature_weight, fill = feature_weight > 0)) +
-  geom_col(show.legend = FALSE) +
-  coord_flip() +
-  facet_wrap(~ case, scales = "free_y") +
-  labs(
-    title = "LIME Explanations for Boston Housing Predictions",
-    x = "Feature",
-    y = "Contribution to Prediction"
-  ) +
-  scale_fill_manual(values = c("red", "green")) +
-  theme_minimal(base_size = 12)
 
 ```
+```{r}
+ggplot(lm_coef %>% filter(term != "(Intercept)"), 
+       aes(x = reorder(term, estimate), y = estimate, fill = significance)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(
+    title = "Linear Regression: Feature Effects on Home Value",
+    x = "Feature",
+    y = "Coefficient Estimate ($1000s)",
+    fill = "Significance"
+  ) +
+  theme_minimal()
+```
+
 
