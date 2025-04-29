@@ -1,4 +1,4 @@
-# Interactive graph
+# Graphs for both linear model and SHAP random forest 
 
 <style>
   * {
