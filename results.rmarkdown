@@ -20,6 +20,10 @@ Captures Interactions for linear regression? No
 Captures Non-linearity for random forest?	Yes	
 Captures Non-linearity for linear regression? No
 
+
+
+
+
 ```{r}
 library(randomForest)
 library(MASS)
@@ -45,9 +49,17 @@ rf_model
 lm_model
 ```
 
+
+
+
+
 After knowing about the model differences, it is essential to check for 
 consistency in features for the SHAP random forest model for Boston
 housing dataset. 
+
+
+
+
 
 ```{r}
 library(fastshap)  # For fast SHAP approximations
@@ -97,6 +109,10 @@ avg_shap_diffs <- rowMeans(shap_diffs)
 avg_shap_diffs
 ```
 
+
+
+
+
 We could interpret from the data that the average SHAP differences is low
 for the features like:
 -crim, -zn, -indus, -chas, -age, -dis, -rad, -tax, -ptratio, -black.
@@ -106,6 +122,10 @@ However, there is a high average differences for the features:
 
 Here, I made a PDP and ICE plot for knowing the reasons like why some features
 were not consistent: 
+
+
+
+
 ```{r}
 library(pdp)
 library(ggplot2)
@@ -122,6 +142,10 @@ ggplot(ice_lstat, aes(lstat, yhat, group = yhat.id)) +
   geom_line(alpha = 0.2) +
   labs(title = "ICE Plots for 'lstat'")
 ```
+
+
+
+
 From the graphs, I could notice that the trend of the curves show similar 
 pattern, which is that as the number of the lower percentage of the population 
 increases, the house price decreases significantly. 
@@ -132,6 +156,10 @@ which implies that the house price is highly sensitive to lstat.
 Since the high inconsistency and non-linearity appear for the feature lstat,
 I made the graph for the rm+ lstat for knowing if lstat has an interaction with 
 rm that causes the SHAP's explanation to be inconsistent. 
+
+
+
+
 ```{r}
 library(fastshap)
 shap_values <- explain(rf_model, X = X_train, nsim = 50, pred_wrapper = pred_fun)
@@ -158,6 +186,10 @@ ggplot(shap_df, aes(lstat, lstat, color = crim)) +
   )
 
 ```
+
+
+
+
 I think from the graph above, it shows that the lstat and crim together give
 a strong impact on the SHAP value (House price). Therefore, it explains for
 why there is a high inconsistency for the lstat feature itself. Similarly, 
@@ -170,6 +202,10 @@ that chas is the feature with no sigificance. I think it could tell that
 the p-value for chas is larger than the standard threshold, 0.05. But again, I 
 believe it is still an important feature, especially for understanding if it
 has an interaction effect or it might has the coefficient value. 
+
+
+
+
 ```{r}
 library(fastshap)
 library(shapviz)
@@ -230,6 +266,10 @@ lm_coef %>%
 
 ```
 
+
+
+
+
 Then, I did a visual comparison graph that is also shown in the graphs.qmd. 
 It is the comparison graph that we can easily detect that SHAP highlights some 
 important features that might not count as important in the linear regression
@@ -239,6 +279,10 @@ important in the SHAP random forest model.
 However, there is still a strong alignment for multiple features in
 linear regression model and SHAP's random forest model. More details will
 be explained later in the graphs and analysis section!
+
+
+
+
 ```{r}
 library(plotly)
 library(shiny)

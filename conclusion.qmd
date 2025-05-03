@@ -2,7 +2,7 @@
 
 To answer the questions mentioned in the index.qmd:
 
-Do SHAP's explanations about black box models align with the interpretability of 
+Do SHAP's explanations about black box models align with the interpretability of
 intrinsically interpretable models like linear regression?
 
 I think some of the SHAP's explanations do align with the interpretable model's 
