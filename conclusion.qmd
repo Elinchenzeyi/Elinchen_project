@@ -1,2 +1,67 @@
 # Conclusion
 
+To answer the questions mentioned in the index.qmd:
+
+Do SHAP's explanations about black box models align with the interpretability of 
+intrinsically interpretable models like linear regression?
+
+I think some of the SHAP's explanations do align with the interpretable model's 
+results. 
+Specifcially, SHAP provides the valuable and consistent explanations with 
+linear regression's global feature importance, but what's more, I think
+SHAP even also explores the non-linear effects the linear model misses to 
+discover. It could show that SHAP is trustworthy and works as a complement 
+to the linear regression model in understanding black-box predictions on the 
+structured data like the Boston Housing dataset. 
+
+1. Do the most important features identified by SHAP match those from linear 
+regression?
+
+Well, I think there is a similar overlap in most of the top features identified 
+by both SHAP-random forest and linear regression. 
+Both models identify the important features like: 
+-lstat
+-ptratio
+-rm
+-crim
+-rad
+
+But the differences do emerge for some features, like there is a huge
+difference for the feature nox. Linear regression models detect nox as the 
+most significant feature but SHAP for random forest model does not detect it as
+important at all. 
+
+
+2. How consistent are SHAP's explanations across similar observations?
+
+I think SHAP shows strong local consistency: 
+
+Like for similar observations, SHAP tends to attribute similar feature 
+contributions to the prediction. In using k-nearest neighbors or clustered 
+groups, SHAP values for features like lstat and ptratio suggests that the 
+Random Forest model behaves consistently within the local regions of the 
+input space. 
+
+
+3. Would SHAP and linear regression disagree on some parts?
+
+Yes. For a few features in the Boston housing dataset, the two models show 
+significant disagreement, which are:
+-nox 
+-chas
+
+I think the difference is due to the fact that in the Boston Housing dataset, 
+nox tends to be negatively correlated with medv. As pollution increases, 
+housing prices drop. So the linear regression model sees it as strongly
+predictive. 
+
+However, random forest captures the non-linear and iteraction effects. So
+it could be the fact that nox's signal overlaps with other features or nox 
+affects the price only as extreme values. 
+
+SHAP for random forest model only reflects how much each feature actually 
+contributes to predictions across the trees, but not how strongly it correlates
+in isolation to the housing price, so it has a few inconsistent ideas with 
+the linear regression model. 
+
+
