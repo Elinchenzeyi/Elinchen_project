@@ -204,8 +204,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>From the data section, I generated the train and test data, and the two different models are based on the data.</p>
-<p>I could tell that speaking of the model performance comparison: Random Forest vs.&nbsp;Linear Regression Mean Squared Residuals for random forest: 11.5135. Mean Squared Residuals for linear regression: tendency to be higher % Variance Explained for random forest: 85.9%<br>
-% Variance Explained for linear regression: tendency to be lower Linearity Assumed for random forest? No Linearity Assumed for linear regression? Yes Captures Interactions for random forest? Yes Captures Interactions for linear regression? No Captures Non-linearity for random forest? Yes Captures Non-linearity for linear regression? No</p>
+<p>I could tell that speaking of the model performance comparison:</p>
+<p>Random Forest vs.&nbsp;Linear Regression</p>
+<p>Mean Squared Residuals for random forest: 11.5135.</p>
+<p>Mean Squared Residuals for linear regression: tendency to be higher</p>
+<p>% Variance Explained for random forest: 85.9%</p>
+<p>% Variance Explained for linear regression: tendency to be lower</p>
+<p>Linearity Assumed for random forest? No</p>
+<p>Linearity Assumed for linear regression? Yes</p>
+<p>Captures Interactions for random forest? Yes</p>
+<p>Captures Interactions for linear regression? No</p>
+<p>Captures Non-linearity for random forest? Yes</p>
+<p>Captures Non-linearity for linear regression? No</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -556,7 +566,7 @@ Attaching package: 'pdp'</code></pre>
 </div>
 </div>
 <p>Then, I did a visual comparison graph that is also shown in the graphs.qmd. It is the comparison graph that we can easily detect that SHAP highlights some important features that might not count as important in the linear regression model. Similarly, linear regression has some features that are not count important in the SHAP random forest model.</p>
-<p>However, there is still a strong alignment for multiple features in linear regression model and SHAP’s random forest model.</p>
+<p>However, there is still a strong alignment for multiple features in linear regression model and SHAP’s random forest model. More details will be explained later in the graphs and analysis section!</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
