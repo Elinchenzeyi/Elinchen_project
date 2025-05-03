@@ -23,7 +23,6 @@ Captures Non-linearity for linear regression? No
 
 
 
-
 ```{r}
 library(randomForest)
 library(MASS)
@@ -52,11 +51,9 @@ lm_model
 
 
 
-
 After knowing about the model differences, it is essential to check for 
 consistency in features for the SHAP random forest model for Boston
 housing dataset. 
-
 
 
 
@@ -112,7 +109,6 @@ avg_shap_diffs
 
 
 
-
 We could interpret from the data that the average SHAP differences is low
 for the features like:
 -crim, -zn, -indus, -chas, -age, -dis, -rad, -tax, -ptratio, -black.
@@ -122,7 +118,6 @@ However, there is a high average differences for the features:
 
 Here, I made a PDP and ICE plot for knowing the reasons like why some features
 were not consistent: 
-
 
 
 
@@ -145,7 +140,6 @@ ggplot(ice_lstat, aes(lstat, yhat, group = yhat.id)) +
 
 
 
-
 From the graphs, I could notice that the trend of the curves show similar 
 pattern, which is that as the number of the lower percentage of the population 
 increases, the house price decreases significantly. 
@@ -156,7 +150,6 @@ which implies that the house price is highly sensitive to lstat.
 Since the high inconsistency and non-linearity appear for the feature lstat,
 I made the graph for the rm+ lstat for knowing if lstat has an interaction with 
 rm that causes the SHAP's explanation to be inconsistent. 
-
 
 
 
@@ -189,7 +182,6 @@ ggplot(shap_df, aes(lstat, lstat, color = crim)) +
 
 
 
-
 I think from the graph above, it shows that the lstat and crim together give
 a strong impact on the SHAP value (House price). Therefore, it explains for
 why there is a high inconsistency for the lstat feature itself. Similarly, 
@@ -202,7 +194,6 @@ that chas is the feature with no sigificance. I think it could tell that
 the p-value for chas is larger than the standard threshold, 0.05. But again, I 
 believe it is still an important feature, especially for understanding if it
 has an interaction effect or it might has the coefficient value. 
-
 
 
 
@@ -269,7 +260,6 @@ lm_coef %>%
 
 
 
-
 Then, I did a visual comparison graph that is also shown in the graphs.qmd. 
 It is the comparison graph that we can easily detect that SHAP highlights some 
 important features that might not count as important in the linear regression
@@ -279,7 +269,6 @@ important in the SHAP random forest model.
 However, there is still a strong alignment for multiple features in
 linear regression model and SHAP's random forest model. More details will
 be explained later in the graphs and analysis section!
-
 
 
 
