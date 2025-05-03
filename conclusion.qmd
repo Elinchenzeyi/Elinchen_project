@@ -34,13 +34,11 @@ important at all.
 
 2. How consistent are SHAP's explanations across similar observations?
 
-I think SHAP shows strong local consistency: 
-
-Like for similar observations, SHAP tends to attribute similar feature 
-contributions to the prediction. In using k-nearest neighbors or clustered 
-groups, SHAP values for features like lstat and ptratio suggests that the 
-Random Forest model behaves consistently within the local regions of the 
-input space. 
+I think SHAP shows strong local consistency in some fields but I also noticed 
+that in using k-nearest neighbors for some features like lstat, 
+there is a high local inconsistency. 
+The local inconsistency may due to the interactions effects, like lstat
+and crim together could give a strong impact to the house price. 
 
 
 3. Would SHAP and linear regression disagree on some parts?

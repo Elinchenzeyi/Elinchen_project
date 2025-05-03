@@ -166,7 +166,7 @@ the rm, rad, nox, dis, pupil-teacher ratio, lstat, crim. It is interesting
 to notice that the linear regression model also lists the feature effect that
 is not significant, which is chas in the Boston Housing dataset. 
 
-I think it shows that chas is not statistically significant in the linear
+I think it shows that chas does not have a high feature effect in the linear
 model, but it doesn't mean that chas is not important because feature importance
 usually does not consider p-values. Feature importance helps to know how the 
 model relies on chas on average. 

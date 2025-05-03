@@ -115,11 +115,12 @@ shap_values <- fastshap::explain(
   nsim = 10 
 )
 
-shap_values
+shap_values[1, c("lstat", "rm", "nox", "ptratio", "chas")]
 ```
 
-Here are the features in our SHAP values. (just two rows for a basic description)
-I will explain more feature importance with the graphs in d3graph.qmd section!
+Here are all the features for the SHAP(random forest). (I just listed two rows
+for a basic description)
+I will explain more feature importance with the graphs in graph.qmd section!
 ```{r}
 dim(shap_values) 
 dim(test_data[1:5, -which(names(test_data) == "medv")]) 
