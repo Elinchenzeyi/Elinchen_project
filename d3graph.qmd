@@ -94,21 +94,27 @@ In this plot, features with negative values indicate that as they increases,
 the house price would decrease: 
 
 lstat-Higher poverty→ Lowers home price	
+
 Homes in low-income areas are valued less.
 
 
-crim-Higher crime rate → Lowers home price	
+crim-Higher crime rate → Lowers home price
+
 Safety concerns might reduce buyer demand.
 
 
 nox-More pollution → Lowers home price	
+
 Air quality negatively impacts the house price.
 
 
 age-Older property → Slightly lowers price	
+
 Aging infrastructure reduces the houses appeal.
 
+
 ptratio-Pupil-Teacher Ratio → Increases price
+
 Better school quality increases the location value
 
 
