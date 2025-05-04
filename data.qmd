@@ -58,9 +58,9 @@ y_test <- y[-train_index]
 
 Based on the train and test data, I trained the random forest model: 
 
-The result shows that my model explains 85.93% variability in the dataset 
+The result shows that my model explains 85.85% variability in the dataset 
 and the average squared difference between the actual and predicted values 
-is 11.49
+is 11.5
 
 Based on this result, I could know that the random forest model is a good
 fit for SHAP interpretation! 

@@ -180,15 +180,21 @@ ggplot(shap_df, aes(lstat, lstat, color = crim)) +
 
 ```
 I think from the graph above, it shows that the lstat and crim together give
-a strong impact on the SHAP value (House price). Therefore, it explains for
-why there is a high inconsistency for the lstat feature itself. Similarly, 
-I think the high inconsistency for nox and rm could also be influenced by the 
-interaction effects. 
+a strong impact on the SHAP value (House price). As the population of the 
+lower percentage of status increases and the number of crime goes higher, the 
+impact on the house price increases. Therefore, it explains for
+why there is a high inconsistency for the lstat feature itself-there is a strong
+interaction! Similarly, I think the high inconsistency for nox and rm could also
+be influenced by the interaction effects.
+
+
+
 
 
 Then, I explore the feature significance in linear regression model, and notice
 that chas is the feature with no significance. It is because
 the p-value for chas is larger than the standard threshold, 0.05. 
+
 
 But again, I believe it is still an important feature even though it is not 
 statistically significant. In fact, it is important as it might have an
@@ -260,12 +266,22 @@ Graphs and Analysis).
 From the comparison graph, I can easily detect that SHAP highlights some 
 important features that might not count as important in the linear regression
 model. Similarly, linear regression has some features that are not count
-important in the SHAP random forest model. 
+important in the SHAP random forest model. The major differences could be due
+to the fact that linear regression model assumes linearity, which only captures
+additive, proportional relationships between the features and the target. But 
+SHAP for random forest model captures the non-linearity and interactions. 
+Random forest splits the data based on thresholds and combinations of features. 
 
 
-However, there is still a strong alignment for multiple features in
-linear regression model and SHAP's random forest model. More details will
-be explained later in the graphs and analysis section!
+
+However, I can still detect that there are some alignments for multiple features
+in the linear regression model and SHAP's random forest model. It is because
+some features have a consistent directional effect on the target variable, no
+matter modeled linearly or non-linearly. 
+
+
+I took nox as an example in the graphs and analysis section, so more details in
+the difference will be explained there.
 
 
 ```{r}

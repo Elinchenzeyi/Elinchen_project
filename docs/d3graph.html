@@ -602,7 +602,7 @@ Attaching package: 'plotly'</code></pre>
 <p>nox shows high importance because linear assumes a linear relationship, and here it captures how strongly nox correlates with price (medv). Like if nox increases by 1 unit, price drops by a significant amount.</p>
 <p>Random Forest + SHAP:</p>
 <p>nox has low importance because RF models non-linear and interaction effects, and here, nox’s predictive power might overlap with other features.</p>
-<p>So, linear regression prioritizes nox as it correlates with price. It cannot “see” interactions. But random forest ignores nox because there are other features that better split the data, and nox’s effect might be captured indirectly through other variables.</p>
+<p>So, linear regression prioritizes nox as it correlates with price. It cannot assume the interactions. But random forest ignores nox because there are other features that better split the data, and nox’s effect might be captured indirectly through other variables.</p>
 
 
 </section>
