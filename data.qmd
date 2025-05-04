@@ -145,14 +145,12 @@ shp
 ```
 
 
-Here are the feature importance that I could easily interpret from the linear
-regression model. It is obviously that nox is the most important feature followed
-by rm, chas, dis, and so forth.
-
 ```{r}
 lm_importance <- coef(lm_model)[-1] %>% abs() %>% sort(decreasing = TRUE) %>%
   enframe(name = "feature", value = "lm_importance")
 lm_importance
 ```
 
-
+Here are the feature importance that I could easily interpret from the linear
+regression model. It is obviously that nox is the most important feature followed
+by rm, chas, dis, and so forth.

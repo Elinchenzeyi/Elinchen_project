@@ -263,28 +263,6 @@ lm_coef %>%
 Then, I did a visual comparison graph that is also shown in the section 4 (More
 Graphs and Analysis). 
 
-
-From the comparison graph, I can easily detect that SHAP highlights some 
-important features that might not count as important in the linear regression
-model. Similarly, linear regression has some features that are not count
-important in the SHAP random forest model. The major differences could be due
-to the fact that linear regression model assumes linearity, which only captures
-additive, proportional relationships between the features and the target. But 
-SHAP for random forest model captures the non-linearity and interactions. 
-Random forest splits the data based on thresholds and combinations of features. 
-
-
-
-However, I can still detect that there are some alignments for multiple features
-in the linear regression model and SHAP's random forest model. It is because
-some features have a consistent directional effect on the target variable, no
-matter modeled linearly or non-linearly. 
-
-
-I took nox as an example in the graphs and analysis section, so more details in
-the difference will be explained there.
-
-
 ```{r}
 library(plotly)
 library(shiny)
@@ -337,3 +315,22 @@ ggplot(combined_df, aes(x = reorder(Feature, Importance), y = Importance, fill =
 
 ```
 
+From the comparison graph, I can easily detect that SHAP highlights some 
+important features that might not count as important in the linear regression
+model. Similarly, linear regression has some features that are not count
+important in the SHAP random forest model. The major differences could be due
+to the fact that linear regression model assumes linearity, which only captures
+additive, proportional relationships between the features and the target. But 
+SHAP for random forest model captures the non-linearity and interactions. 
+Random forest splits the data based on thresholds and combinations of features. 
+
+
+
+However, I can still detect that there are some alignments for multiple features
+in the linear regression model and SHAP's random forest model. It is because
+some features have a consistent directional effect on the target variable, no
+matter modeled linearly or non-linearly. 
+
+
+I took nox as an example in the graphs and analysis section, so more details in
+the difference will be explained there.
