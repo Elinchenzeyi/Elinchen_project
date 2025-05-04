@@ -14,26 +14,6 @@
 <script src="scripts/myscript.js"></script>
 
 
-The following graph is the force plot that is based on using SHAP model.
-
-In this plot, it shows the variables that affect the predictions the most. 
-
-Specifically, I can notice that based on the predictions, rm is 6.01, which 
-falls into the red region that shows decrease 0.225. 
-
-I think it might suggest that average number of rooms puts the prediction down 
-by 0.225. But it does not mean that this feature is not important. 
-Instead, this feature is important as it creates impact for our model.
-
-Also, I can notice that the per capita crime rate, pupil-teacher ratio, 
-lower status population, proposition of old housing are the variables that 
-increases our prediction.
-
-Specifcially, I can notice that per capital crime rate is 0.0883,
-which increases our model by 0.103. pupil teacher ratio is 15.2, which 
-increases our model by 0.378. Age is 66.6, which increases our model by 0.587. 
-
-Here, I think the E[f(x)] gives the base value across the training data. 
 
 ```{r}
 library(fastshap)
@@ -108,21 +88,30 @@ shp <- shapviz(
 sv_force(shp, row_id = 1) 
   
 ```
+The sv_force graph is the force plot that is based on using SHAP model.
 
-Based on the sv_force graph, we can tell that the model's actual prediction is 
-the formula:
+In this plot, features with negative values indicate that as they increases, 
+the house price would decrease: 
 
-Base Value + Sum of SHAP Contributions = 0 + (+0.378 +0.528 +0.587-0.225 + ...) 
-=1.3
-
-```{r}
-function_x<-1.3
-```
+lstat-Higher poverty→ Lowers home price	
+Homes in low-income areas are valued less.
 
 
-It shows the variables that are the most important ones in our SHAP feature graph
-and from this graph with all the yellow bars, we can notice that: rm is the 
-most influential one followed by lstat, indus, tax and so forth. 
+crim-Higher crime rate → Lowers home price	
+Safety concerns might reduce buyer demand.
+
+
+nox-More pollution → Lowers home price	
+Air quality negatively impacts the house price.
+
+
+age-Older property → Slightly lowers price	
+Aging infrastructure reduces the houses appeal.
+
+ptratio-Pupil-Teacher Ratio → Increases price
+Better school quality increases the location value
+
+
 
 ```{r}
 sv_importance(shp)+
@@ -131,7 +120,21 @@ sv_importance(shp)+
   theme_minimal()
 ```
 
-Graphs with linear regression models: 
+Here, I also made a feature importance graph using SHAP. 
+
+From this graph with all the yellow bars, I can notice that: rm is the 
+most influential one followed by lstat, indus, tax and so forth. 
+
+rm is the most important feature: it has the widest spread of SHAP values, 
+so it has a large influence on the model’s output.
+
+lstat is next in importance: its SHAP values tend to lower predictions, 
+indicating areas with higher lstat typically have lower housing prices.
+
+indus and tax are also influential but less so... 
+
+
+
 ```{r}
 library(MASS)
 library(tidyverse)
@@ -169,14 +172,19 @@ I can notice that there are several significant variables that contribute to
 the model prediction, such as rm, rad, nox, dis, pupil-teacher ratio, lstat, 
 and crim. 
 
+
 It is interesting to notice that the linear regression model also lists the 
 feature effect that is not significant, which is chas in the Boston housing 
 dataset. 
 
+
 I think it shows that chas does not have a high feature effect in the linear
 model, but it doesn't mean that chas is not important because feature importance
 usually does not consider p-values. Feature importance helps to know how the 
-model relies on chas on average. 
+model relies on chas on average. In this case, chas is not significant means 
+that it is not statistically significant. 
+
+
 
 ```{r}
 ggplot(lm_coef %>% filter(term != "(Intercept)"), 
