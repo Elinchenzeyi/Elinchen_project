@@ -7,7 +7,7 @@ I could tell that speaking of the model performance comparison:
 
 Random Forest	 vs. Linear Regression
 
-Mean Squared Residuals for random forest:	11.5135.
+Mean Squared Residuals for random forest:	11.5.
 
 Mean Squared Residuals for linear regression: tendency to be higher
 
