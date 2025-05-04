@@ -505,9 +505,6 @@ Aging infrastructure reduces the houses appeal.</p>
 </div>
 </div>
 </div>
-<p>From the comparison graph I made below, it is obvious that speaking of feature importance, linear regression model and the SHAP model highlights some consistent importance features for the boston housing dataset, which are rm, pupil-teacher ratio, lstat, and crim.</p>
-<p>But linear regression model shows that nox is also important, and in fact, it is the most impactful feature in the model.</p>
-<p>It’s interesting to notice that SHAP shows that it is slightly important to the overall model prediction. This pattern applies similarly for the feature chas.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -595,6 +592,9 @@ Attaching package: 'plotly'</code></pre>
 </div>
 </div>
 </div>
+<p>From the comparison graph, it is obvious that speaking of feature importance, linear regression model and the SHAP model highlights some consistent importance features for the boston housing dataset, which are rm, pupil-teacher ratio, lstat, and crim.</p>
+<p>But linear regression model shows that nox is also important, and in fact, it is the most impactful feature in the model.</p>
+<p>It’s interesting to notice that SHAP shows that it is slightly important to the overall model prediction. This pattern applies similarly for the feature chas.</p>
 <p>In general, I will take nox as an example to talk about the fundamental difference in these two approaches.</p>
 <p>For the Linear Regression model:</p>
 <p>nox shows high importance because linear assumes a linear relationship, and here it captures how strongly nox correlates with price (medv). Like if nox increases by 1 unit, price drops by a significant amount.</p>

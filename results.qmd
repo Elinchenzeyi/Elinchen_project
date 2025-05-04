@@ -13,7 +13,7 @@ Mean Squared Residuals for linear regression: tendency to be higher
 
 
 
-% Variance Explained for random forest:	85.9%	
+% Variance Explained for random forest:	85.85%	
 
 % Variance Explained for linear regression: tendency to be lower
 
@@ -60,9 +60,6 @@ rf_model
 lm_model
 ```
 
-After knowing about the model differences, it is essential to check for 
-consistency in features for the SHAP random forest model for Boston
-housing dataset. 
 
 ```{r}
 library(fastshap)  # For fast SHAP approximations
@@ -111,7 +108,11 @@ avg_shap_diffs <- rowMeans(shap_diffs)
 
 avg_shap_diffs
 ```
-Knn equals to 5 is a way to understand the local consistency, like it
+After knowing about the model differences, it is essential to check for 
+consistency in features for the SHAP random forest model for Boston
+housing dataset. 
+
+Here, Knn equals to 5 is a way to understand the local consistency, like it
 helps me to measure how stable the features are compared to its 5
 most similar neighbors. 
 
@@ -125,7 +126,7 @@ However, there is a high average differences for the features:
 -rm, -lstat, -nox
 
 
-Here, I made a PDP and ICE plot for knowing the reasons like why some features
+Then, I made a PDP and ICE plot for knowing the reasons like why some features
 were not consistent: 
 ```{r}
 library(pdp)

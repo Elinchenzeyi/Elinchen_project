@@ -201,25 +201,6 @@ ggplot(lm_coef %>% filter(term != "(Intercept)"),
 ```
 
 
-
-
-
-From the comparison graph I made below, it is obvious that speaking of feature
-importance, linear regression model and the SHAP model highlights some
-consistent importance features for the boston housing dataset, which are 
-rm, pupil-teacher ratio, lstat, and crim. 
-
-
-
-But linear regression model shows that nox is also important, and in fact, 
-it is the most impactful feature in the model. 
-
-
-
-It's interesting to notice that SHAP shows that it is slightly important to the
-overall model prediction.
-This pattern applies similarly for the feature chas. 
-
 ```{r}
 library(plotly)
 library(shiny)
@@ -273,6 +254,22 @@ ggplot(combined_df, aes(x = reorder(Feature, Importance), y = Importance, fill =
 
 
 ```
+
+From the comparison graph, it is obvious that speaking of feature
+importance, linear regression model and the SHAP model highlights some
+consistent importance features for the boston housing dataset, which are 
+rm, pupil-teacher ratio, lstat, and crim. 
+
+
+But linear regression model shows that nox is also important, and in fact, 
+it is the most impactful feature in the model. 
+
+
+It's interesting to notice that SHAP shows that it is slightly important to the
+overall model prediction.
+This pattern applies similarly for the feature chas. 
+
+
 In general, I will take nox as an example to talk about the fundamental 
 difference in these two approaches.
 
