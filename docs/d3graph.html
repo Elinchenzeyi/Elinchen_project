@@ -421,7 +421,7 @@ Coefficients:
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>function_x<span class="ot">&lt;-</span><span class="fl">1.3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<p>It shows the variables that are the most important ones in our SHAP feature graph and from this graph with all the yellow bars, we can notice that: lstat is the most influential one followed by age, and then pupil-teacher ratio, rm and so forth.</p>
+<p>It shows the variables that are the most important ones in our SHAP feature graph and from this graph with all the yellow bars, we can notice that: rm is the most influential one followed by lstat, indus, tax and so forth.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -507,7 +507,7 @@ Coefficients:
 </div>
 </div>
 </div>
-<p>From the comparison graph I made, it is obvious that speaking of feature importance, linear regression model and the SHAP model highlights some consistent importance features for the boston housing dataset, which are rm, pupil-teacher ratio, lstat, and crim.</p>
+<p>From the comparison graph I made below, it is obvious that speaking of feature importance, linear regression model and the SHAP model highlights some consistent importance features for the boston housing dataset, which are rm, pupil-teacher ratio, lstat, and crim.</p>
 <p>But linear regression model shows that nox is also important, and in fact, it is the most impactful feature in the model.</p>
 <p>It’s interesting to notice that SHAP shows that it is slightly important to the overall model prediction. This pattern applies similarly for the feature chas.</p>
 <div class="cell">
