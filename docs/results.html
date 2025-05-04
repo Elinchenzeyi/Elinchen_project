@@ -385,7 +385,8 @@ Attaching package: 'fastshap'</code></pre>
 0.63195177 0.09928622 0.30506053 0.65355903 0.28250744 3.63036893 </code></pre>
 </div>
 </div>
-<p>We could interpret from the data that the average SHAP differences is low for the features like: -crim, -zn, -indus, -chas, -age, -dis, -rad, -tax, -ptratio, -black.</p>
+<p>Knn equals to 5 is a way to understand the local consistency, like it helps me to measure how stable the features are compared to its 5 most similar neighbors.</p>
+<p>I could interpret from the data that the average SHAP differences is low for the features like: -crim, -zn, -indus, -chas, -age, -dis, -rad, -tax, -ptratio, -black.</p>
 <p>However, there is a high average differences for the features: -rm, -lstat, -nox</p>
 <p>Here, I made a PDP and ICE plot for knowing the reasons like why some features were not consistent:</p>
 <div class="cell">
@@ -474,7 +475,8 @@ Attaching package: 'pdp'</code></pre>
 </div>
 </div>
 <p>I think from the graph above, it shows that the lstat and crim together give a strong impact on the SHAP value (House price). Therefore, it explains for why there is a high inconsistency for the lstat feature itself. Similarly, I think the high inconsistency for nox and rm could also be influenced by the interaction effects.</p>
-<p>Then, I explore the feature significance in linear regression model, and notice that chas is the feature with no sigificance. I think it could tell that the p-value for chas is larger than the standard threshold, 0.05. But again, I believe it is still an important feature, especially for understanding if it has an interaction effect or it might has the coefficient value.</p>
+<p>Then, I explore the feature significance in linear regression model, and notice that chas is the feature with no significance. It is because the p-value for chas is larger than the standard threshold, 0.05.</p>
+<p>But again, I believe it is still an important feature even though it is not statistically significant. In fact, it is important as it might have an interaction effect or it might has the coefficient value.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -565,7 +567,8 @@ Attaching package: 'pdp'</code></pre>
 13 indus    -0.0000893   0.0689   -0.00130 9.99e- 1  0.0000893 Not significant</code></pre>
 </div>
 </div>
-<p>Then, I did a visual comparison graph that is also shown in the graphs.qmd. It is the comparison graph that we can easily detect that SHAP highlights some important features that might not count as important in the linear regression model. Similarly, linear regression has some features that are not count important in the SHAP random forest model.</p>
+<p>Then, I did a visual comparison graph that is also shown in the section 4 (More Graphs and Analysis).</p>
+<p>From the comparison graph, I can easily detect that SHAP highlights some important features that might not count as important in the linear regression model. Similarly, linear regression has some features that are not count important in the SHAP random forest model.</p>
 <p>However, there is still a strong alignment for multiple features in linear regression model and SHAP’s random forest model. More details will be explained later in the graphs and analysis section!</p>
 <div class="cell">
 <details class="code-fold">
